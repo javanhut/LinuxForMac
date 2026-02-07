@@ -1,5 +1,5 @@
 FROM docker.io/library/fedora:43
-RUN dnf install -y zsh curl sudo && dnf clean all
+RUN dnf install -y zsh curl sudo util-linux && dnf clean all
 RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
 COPY starship.toml /etc/starship.toml
 COPY entrypoint.sh /entrypoint.sh
