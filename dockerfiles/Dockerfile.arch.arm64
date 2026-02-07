@@ -1,5 +1,5 @@
 FROM docker.io/menci/archlinuxarm
-RUN pacman -Sy --noconfirm zsh curl sudo && pacman -Scc --noconfirm
+RUN pacman -Syu --noconfirm && pacman -S --noconfirm zsh curl sudo && pacman -Scc --noconfirm
 RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
 COPY starship.toml /etc/starship.toml
 COPY entrypoint.sh /entrypoint.sh
