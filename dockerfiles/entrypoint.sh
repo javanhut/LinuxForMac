@@ -28,9 +28,8 @@ echo "$HOST_USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/"$HOST_USER"
 chmod 0440 /etc/sudoers.d/"$HOST_USER"
 
 # Package persistence via /data volume
-if [ -d /data ]; then
+if [ -d /data ] && mkdir -p "/data/packages/$DISTRO_TYPE" 2>/dev/null; then
     PKG_DIR="/data/packages/$DISTRO_TYPE"
-    mkdir -p "$PKG_DIR"
 
     case "$DISTRO_TYPE" in
         ubuntu|debian)
