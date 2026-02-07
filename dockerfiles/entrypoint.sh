@@ -14,7 +14,13 @@ fi
 HOST_GROUP=$(getent group "$HOST_GID" | cut -d: -f1)
 
 if ! id "$HOST_USER" > /dev/null 2>&1; then
-    useradd -m -u "$HOST_UID" -g "$HOST_GID" -s /bin/zsh "$HOST_USER"
+    useradd_flags="-o -u $HOST_UID -g $HOST_GID -s /bin/zsh"
+    if [ -d "/home/$HOST_USER" ]; then
+        useradd_flags="$useradd_flags -M -d /home/$HOST_USER"
+    else
+        useradd_flags="$useradd_flags -m"
+    fi
+    useradd $useradd_flags "$HOST_USER" 2>/dev/null || true
 fi
 
 # Add user to sudoers (passwordless)
@@ -29,42 +35,50 @@ if [ -d /data ]; then
     case "$DISTRO_TYPE" in
         ubuntu|debian)
             for dir in /var/cache/apt /var/lib/apt /var/lib/dpkg; do
-                target="$PKG_DIR$(echo $dir | tr '/' '_')"
-                if [ ! -d "$target" ]; then
-                    cp -a "$dir" "$target"
+                if [ -d "$dir" ]; then
+                    target="$PKG_DIR$(echo $dir | tr '/' '_')"
+                    if [ ! -d "$target" ]; then
+                        cp -a "$dir" "$target"
+                    fi
+                    rm -rf "$dir"
+                    ln -sf "$target" "$dir"
                 fi
-                rm -rf "$dir"
-                ln -sf "$target" "$dir"
             done
             ;;
         arch)
             for dir in /var/cache/pacman /var/lib/pacman; do
-                target="$PKG_DIR$(echo $dir | tr '/' '_')"
-                if [ ! -d "$target" ]; then
-                    cp -a "$dir" "$target"
+                if [ -d "$dir" ]; then
+                    target="$PKG_DIR$(echo $dir | tr '/' '_')"
+                    if [ ! -d "$target" ]; then
+                        cp -a "$dir" "$target"
+                    fi
+                    rm -rf "$dir"
+                    ln -sf "$target" "$dir"
                 fi
-                rm -rf "$dir"
-                ln -sf "$target" "$dir"
             done
             ;;
         fedora)
-            for dir in /var/cache/dnf /var/lib/dnf /var/lib/rpm; do
-                target="$PKG_DIR$(echo $dir | tr '/' '_')"
-                if [ ! -d "$target" ]; then
-                    cp -a "$dir" "$target"
+            for dir in /var/cache/libdnf5 /var/lib/dnf /usr/lib/sysimage/rpm; do
+                if [ -d "$dir" ]; then
+                    target="$PKG_DIR$(echo $dir | tr '/' '_')"
+                    if [ ! -d "$target" ]; then
+                        cp -a "$dir" "$target"
+                    fi
+                    rm -rf "$dir"
+                    ln -sf "$target" "$dir"
                 fi
-                rm -rf "$dir"
-                ln -sf "$target" "$dir"
             done
             ;;
         alpine)
             for dir in /var/cache/apk /var/lib/apk; do
-                target="$PKG_DIR$(echo $dir | tr '/' '_')"
-                if [ ! -d "$target" ]; then
-                    cp -a "$dir" "$target"
+                if [ -d "$dir" ]; then
+                    target="$PKG_DIR$(echo $dir | tr '/' '_')"
+                    if [ ! -d "$target" ]; then
+                        cp -a "$dir" "$target"
+                    fi
+                    rm -rf "$dir"
+                    ln -sf "$target" "$dir"
                 fi
-                rm -rf "$dir"
-                ln -sf "$target" "$dir"
             done
             ;;
     esac

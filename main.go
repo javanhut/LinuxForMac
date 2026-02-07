@@ -82,6 +82,9 @@ func buildImage(containerRuntime, distro string) (string, error) {
 	defer os.RemoveAll(buildCtx)
 
 	dockerfile := "Dockerfile." + distro
+	if distro == "arch" && runtime.GOARCH == "arm64" {
+		dockerfile = "Dockerfile.arch.arm64"
+	}
 	buildCmd := exec.Command(containerRuntime, "build", "-t", imageTag, "-f", filepath.Join(buildCtx, dockerfile), buildCtx)
 	buildCmd.Stdout = os.Stdout
 	buildCmd.Stderr = os.Stderr
