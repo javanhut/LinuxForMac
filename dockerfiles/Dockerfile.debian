@@ -1,0 +1,7 @@
+FROM docker.io/library/debian:trixie
+RUN apt-get update && apt-get install -y zsh curl sudo && rm -rf /var/lib/apt/lists/*
+RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
+COPY starship.toml /etc/starship.toml
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

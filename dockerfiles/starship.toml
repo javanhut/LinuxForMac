@@ -1,0 +1,85 @@
+# Starship prompt config — no Nerd Font icons required
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$golang\
+$rust\
+$java\
+$container\
+$cmd_duration\
+$line_break\
+$character"""
+
+[username]
+show_always = true
+format = "[$user]($style)@"
+style_user = "bold green"
+style_root = "bold red"
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style) "
+style = "bold blue"
+
+[directory]
+truncation_length = 4
+truncation_symbol = ".../"
+format = "[$path]($style)[$read_only]($read_only_style) "
+style = "bold cyan"
+
+[git_branch]
+format = "on [$branch]($style) "
+style = "bold purple"
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "bold red"
+conflicted = "="
+ahead = "^"
+behind = "v"
+diverged = "^v"
+untracked = "?"
+stashed = "$"
+modified = "!"
+staged = "+"
+renamed = ">"
+deleted = "x"
+
+[python]
+format = '[py $version]($style) '
+style = "yellow"
+
+[nodejs]
+format = '[node $version]($style) '
+style = "green"
+
+[golang]
+format = '[go $version]($style) '
+style = "cyan"
+
+[rust]
+format = '[rs $version]($style) '
+style = "red"
+
+[java]
+format = '[java $version]($style) '
+style = "dimmed red"
+
+[container]
+format = '[$name]($style) '
+style = "bold dimmed red"
+
+[cmd_duration]
+min_time = 2_000
+format = "took [$duration]($style) "
+style = "yellow"
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[x](bold red)"
