@@ -115,9 +115,7 @@ eval "$(starship init zsh)"
 ZSHRC
 
 # Persist zsh history to /data if available
-if [ -d /data ]; then
-    HIST_DIR="/data/zsh_history"
-    mkdir -p "$HIST_DIR"
+if [ -d /data ] && mkdir -p "/data/zsh_history" 2>/dev/null; then
     # Point history file to persistent storage
     sed -i "s|HISTFILE=~/.zsh_history|HISTFILE=/data/zsh_history/.zsh_history|" "$USER_HOME/.zshrc"
 fi
