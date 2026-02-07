@@ -1,7 +1,8 @@
 FROM docker.io/menci/archlinuxarm
 RUN pacman-key --init && \
     pacman -Syu --noconfirm zsh curl sudo && \
-    rm -rf /var/cache/pacman/pkg/*
+    rm -rf /var/cache/pacman/pkg/* && \
+    sed -i '/^\[options\]/a DisableSandbox' /etc/pacman.conf
 RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
 COPY starship.toml /etc/starship.toml
 COPY entrypoint.sh /entrypoint.sh
